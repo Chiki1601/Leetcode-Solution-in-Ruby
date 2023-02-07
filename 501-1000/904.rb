@@ -1,36 +1,37 @@
-# @param {Integer[]} tree
-# @return {Integer}
 def total_fruit(tree)
-    # a = nil
-    # b = nil
-    # count_a = 0
-    # count_b = 0
-    types = {}
-    i = 0
-    n = tree.length
-    max = 0
-    new_type = false
-    while i < n
-        if types.keys.length < 2
-            types[tree[i]] ||= 0
-            types[tree[i]] += 1 
-            # max = types.values.sum >= max ? types.values.sum : max
-        else
-            if types[tree[i]]
-                types[tree[i]] += 1
-                max = types.values.sum >= max ? types.values.sum : max
-            else
-                new_type = true
-            end  
-        end
-        max = types.values.sum >= max ? types.values.sum : max
-        if new_type
-          i -= types.values.max
-          types = {}
-          new_type = false  
-        else
-            i += 1    
-        end    
+  max = 0
+  current = {}
+  i = 0
+  j = 0
+  c = 0
+  current_tree = nil
+  while i < tree.length
+    current[tree[i]] = 0 if current[tree[i]].nil?
+    current[tree[i]] += 1
+    if current.size == 2
+      if current_tree == nil
+        current_tree = tree[i]
+        j += 1
+      elsif current_tree == tree[i]
+        j += 1
+      elsif current_tree != tree[i]
+        j = 1
+        current_tree = tree[i]
+      end
     end
-    max
+    if current.size <= 2
+      c += 1
+      max = [c, max].max
+    end
+    if current.size > 2
+      i -= j
+      j = 0
+      c = 0
+      current = {}
+      current_tree = nil
+    else
+      i += 1
+    end
+  end
+  max
 end
